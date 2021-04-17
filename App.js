@@ -16,6 +16,7 @@ export default function App() {
     {latitude: -5.884, longitude: -35.17545},
   ]
 
+  const [activeMarker, setActiveMarker] = useState(false);
   const [location, setLocation] = useState(null);
   const [updatedLocation, setUpdatedLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -80,16 +81,16 @@ export default function App() {
             showsUserLocation
             onPress={(event) => {
               const clickedCoordinate = event.nativeEvent.coordinate;
-              // console.log(clickedCoordinate);
+
               arrayPontos.forEach((ponto) => {
               const distancia = measure(ponto.latitude, ponto.longitude, clickedCoordinate.latitude, clickedCoordinate.longitude);
-              if (distancia < 5) {
+              if (distancia < 2.5) {
                 console.log('PONTO: ', ponto.nom_identificacao);
               }
               });
             }}
             >
-            {updatedLocation ? <Marker
+            {updatedLocation && activeMarker ? <Marker
               title="Casa da Laís"
               coordinate={{latitude: updatedLocation.center.latitude, longitude: updatedLocation.center.longitude}}
               draggable
@@ -97,12 +98,8 @@ export default function App() {
             /> : null}
             
             {arrayPontos ? arrayPontos.map((ponto) => (
-              <Circle center={{latitude: ponto.latitude, longitude: ponto.longitude}} radius={5} key={ponto.seq_ponto_servico} fillColor="#FF0" strokeColor="#000" />
+              <Circle center={{latitude: ponto.latitude, longitude: ponto.longitude}} radius={2.5} key={ponto.seq_ponto_servico} fillColor="#FF0" strokeColor="#000" />
             )) : null}
-            {/* <TouchableWithoutFeedback onPress={() => console.log('APERTOU')}>
-              <Circle center={{latitude: -5.88672272127, longitude: -35.1754179495}} radius={5} fillColor="#FF0" strokeColor="#000" />
-            </TouchableWithoutFeedback> */}
-
             
           </MapView>
         ) : null}
